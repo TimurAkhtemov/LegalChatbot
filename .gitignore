@@ -1,0 +1,34 @@
+# Ignore Python virtual environments
+venv/
+__pycache__/
+
+# Ignore dependency installs
+*.egg-info/
+*.log
+*.lock
+*.tmp
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+*.iml
+
+# Ignore everything in data/ except processed statutes JSON
+data/*
+!data/processed/
+!data/processed/nj_statutes.json
+logs/
+*.jsonl  # If you store intermediate dataset files
+*.sqlite  # ChromaDB file
+chromadb/
+db.sqlite3  # If you use SQLite
+
+# Ignore Hugging Face & model files
+.cache/
+*.safetensors
+*.h5
+*.pt
+*.onnx
+
+# Ignore Jupyter Notebook checkpoints (if using notebooks)
+.ipynb_checkpoints/
