@@ -14,9 +14,8 @@ __pycache__/
 *.iml
 
 # Ignore everything in data/ except processed statutes JSON
-data/*
-!data/processed/
-!data/processed/nj_statutes.json
+data/
+!data/README.md
 logs/
 *.jsonl  # If you store intermediate dataset files
 *.sqlite  # ChromaDB file
