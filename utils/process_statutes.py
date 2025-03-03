@@ -2,8 +2,8 @@ import json
 import re
 
 # Paths
-input_file = "data/raw/STATUTES.txt"
-output_file = "data/processed/nj_statutes.json"
+test_input_file = "data/raw/STATUTES.txt"
+test_output_file = "data/processed/processed_nj_statutes.json"
 log_file = "logs/encoding_issues.log"
 
 # Patterns to detect title and sections
@@ -23,12 +23,12 @@ def clean_line(line):
                 cleaned_line += "?"  # Replace with '?' or another placeholder
     return cleaned_line
 
-def parse_statutes():
+def parse_statutes(input_file, output_file):
     """Parses STATUTES.txt into structured JSON format, handling duplicate section numbers."""
     parsed_data = []
     current_title = None
-    current_section = None
-    last_seen_section = None  # Track the last seen section number
+    seen_sections = set()  # Track seen section numbers
+    last_section = None  # Keep track of the last processed section
 
     with open(input_file, "r", encoding="utf-8", errors="replace") as f:
         for line in f:
@@ -36,50 +36,56 @@ def parse_statutes():
 
             if not line:
                 continue
-            
+
             # Detect title
             title_match = title_pattern.match(line)
             if title_match:
                 if current_title:
                     parsed_data.append(current_title)
-                    current_title["sections"].append(current_section)
-                    current_section = None
                 current_title = {
                     "title": f"TITLE {title_match.group(1)} - {title_match.group(2)}",
                     "sections": []
                 }
+                last_section = None  # Reset last processed section
                 continue
-            
+
             # Detect section
             section_match = section_pattern.match(line)
             if section_match:
-                if current_section:
-                    current_title["sections"].append(current_section)
-                current_section = {
-                    "section": section_match.group(1),
-                    "heading": section_match.group(2),
+                section_number = section_match.group(1)
+                section_heading = section_match.group(2)
+
+                # If section is a duplicate but appears consecutively, append text instead of skipping
+                if section_number in seen_sections:
+                    if last_section and last_section["section"] == section_number:
+                        last_section["text"] += (" " + section_heading)
+                    continue
+
+                seen_sections.add(section_number)
+                last_section = {
+                    "section": section_number,
+                    "heading": section_heading,
                     "text": ""
                 }
+                current_title["sections"].append(last_section)
                 continue
-            
-            # Append law text
-            if current_section:
-                current_section["text"] += (" " + line if current_section["text"] else line)
-    
-    # Append last section and title
-    if current_section:
-        current_title["sections"].append(current_section)
+
+            # Append law text (if inside a valid section)
+            if last_section:
+                last_section["text"] += (" " + line if last_section["text"] else line)
+
+    # Append last title to list
     if current_title:
         parsed_data.append(current_title)
-    
+
     # Save to JSON
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(parsed_data, f, indent=4)
 
-    print(f"Processed statutes saved to {output_file}")
-    print(f"Non-UTF-8 characters logged in {log_file}")
+    return parsed_data
 
-if __name__ == "__main__":
-    parse_statutes()
+# Run the updated parser on the test file
+parsed_output = parse_statutes(test_input_file, test_output_file)
 
-
+# Return the path of the generated JSON file
+test_output_file

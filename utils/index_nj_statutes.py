@@ -3,7 +3,7 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 # Paths
-data_file = "data/processed/nj_statutes.json"
+data_file = "data/processed/processed_nj_statutes.json"
 
 # Initialize ChromaDB
 chroma_client = chromadb.PersistentClient(path="data/chromadb")

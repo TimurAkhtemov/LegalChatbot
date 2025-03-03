@@ -60,4 +60,23 @@
 ### Accomplished
 - Verified regex is working properly
 - Processed the STATUTES.TXT file to format the json into title, sections & text
-- 
+- Problems still having was duplicate sections were getting skipped
+- One section has a null text value, need to handle that
+
+## 03/03/2025
+
+### Goals Today
+- Generate embeddings and insert into chromadb (first clear original embeddings)
+  - Query a few sections to confirm proper indexing
+- Implement chunking for longer sections (performance can be improved by breaking sections into smaller chunks)
+- Test basic retrieval 
+  - query = "What is the law regarding name changes in New Jersey?"
+  - results = collection.query(query_texts=[query], n_results=3)
+  - print(results)
+
+### Notes
+- Again had issues with preprocessing duplicate sections were still giving issues and handling empty sections
+- resolved empty section and duplicate section numbers
+- Utilized STATUTES_TEST.txt to test the preprocessing
+
+
