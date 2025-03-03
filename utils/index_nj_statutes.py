@@ -24,6 +24,16 @@ def index_statutes():
             heading = section["heading"]
             text = section["text"]
             
+            # **Debugging: Print before embedding**
+            print(f"\n📌 Embedding Section: {section_id}")
+            print(f"📝 Heading: {heading}")
+            print(f"📜 Text: {text[:200]}...")  # Print first 200 chars
+            
+            # Ensure text is not empty before encoding
+            if not text.strip():
+                print(f"⚠️ Skipping empty section: {section_id}")
+                continue
+
             # Create text for embedding
             doc_text = f"{heading}: {text}"
             embedding = embedding_model.encode(doc_text).tolist()
@@ -31,10 +41,10 @@ def index_statutes():
             # Store in ChromaDB
             collection.add(
                 ids=[section_id],
-                embeddings=[embedding],
+                embeddings=[embedding],  # Ensure this is not empty
                 metadatas=[{"title": title, "section": section_id, "heading": heading, "text": text}]
             )
-            print(f"Indexed: {section_id}")
+            print(f"✅ Indexed: {section_id}")
 
 if __name__ == "__main__":
     index_statutes()

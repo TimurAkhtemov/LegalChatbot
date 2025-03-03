@@ -78,5 +78,7 @@
 - Again had issues with preprocessing duplicate sections were still giving issues and handling empty sections
 - resolved empty section and duplicate section numbers
 - Utilized STATUTES_TEST.txt to test the preprocessing
-
+- Still preprocessing - noticing spots of empty text and/or where the description of the sections describes they have been either: reallocated, repealed, ammended or both inclusive? 
+  - Believe I should just remove these sections as they don't have any useful information
+  - Might need to perform more deeper analyses because there seems to be revision notes in the sections themselve
 

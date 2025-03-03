@@ -31,3 +31,6 @@ db.sqlite3  # If you use SQLite
 
 # Ignore Jupyter Notebook checkpoints (if using notebooks)
 .ipynb_checkpoints/
+
+# Ignore progress notes file
+ProgressChecks.md

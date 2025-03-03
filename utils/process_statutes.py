@@ -8,7 +8,10 @@ log_file = "logs/encoding_issues.log"
 
 # Patterns to detect title and sections
 title_pattern = re.compile(r"^TITLE\s(\d+[A-Z]*)\s+(.+)$")
-section_pattern = re.compile(r"^(\d+[A-Z]*(?::[0-9A-Za-z]+)-[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)*\.?)\s+(.+)$")
+section_pattern = re.compile(
+    r"^(\d+[A-Z]*(?::[0-9A-Za-z]+)-[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)*)(?:\.)?\s+(.+)$"
+)
+
 
 def clean_line(line):
     """Detects and replaces problematic characters while logging them."""
