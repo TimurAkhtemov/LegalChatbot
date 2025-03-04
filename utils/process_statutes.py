@@ -77,9 +77,9 @@ def parse_statutes(input_file, output_file):
             if last_section:
                 last_section["text"] += (" " + line if last_section["text"] else line)
 
-    # Append last title to list
-    if current_title:
-        parsed_data.append(current_title)
+    # **Filter out sections with empty text**
+    for title in parsed_data:
+        title["sections"] = [section for section in title["sections"] if section["text"].strip()]
 
     # Save to JSON
     with open(output_file, "w", encoding="utf-8") as f:
