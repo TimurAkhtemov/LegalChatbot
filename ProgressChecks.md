@@ -81,4 +81,58 @@
 - Still preprocessing - noticing spots of empty text and/or where the description of the sections describes they have been either: reallocated, repealed, ammended or both inclusive? 
   - Believe I should just remove these sections as they don't have any useful information
   - Might need to perform more deeper analyses because there seems to be revision notes in the sections themselve
+- Certain parts of legal housekeeping text should be removed
+Pattern Examples: 
+1. L.1976, c. 47, s. 54A:9-19, eff. July 8, 1976, operative Aug. 30, 1976.
+  - L.1976, c. 47, s. 54A:9-25.1, eff. July 8, 1976, operative Aug. 30, 1976. Amended by L.1980, c. 74, s. 16, eff. July 23, 1980.
 
+### Accomplished
+- More preprocessing in removing duplicates and consolidating sections
+- Reassessed data preprocessing and need to remove more noise from dat
+
+### 03/04/2025
+
+### Goals Today
+- More preprocessing steps
+1. Figure out regex pattern to match legislative history foot notes at the ends of each section (L.1976, c. 47, s. 54A:9-25.1, eff. July 8, 1976, operative Aug. 30, 1976. Amended by L.1980, c. 74, s. 16, eff. July 23, 1980.)
+2. Determine anymore patterns in the text that need to be removed
+
+### Notes
+- Realizing I need to do a lot more preprocessing as random legal metadata introduces noise that could affect performance of the vectordb
+- Regex is annoying
+- Should I just use 2 separate regex patterns?
+
+### Accomplished
+- Able to match majority of the legislative patterns with one regex 
+  - However complexity of this regex is high, and still misses some test cases. Going to split into multiple to capture each pattern
+
+### 03/05/2025
+
+### Goals Today
+- Create multiple regex instead of one giant one for legislative footnotes
+- Successfully remove these footnotes from the data
+- Discover anymore data patterns that need to be removed
+
+### Notes
+- Regex pattern to capture: L.1987, c.453, s.2; amended 1995,c.401, ss.45,17 (s.17 amended 1996, c.15, s.2); 1996, c.15, s.1; 1996, c.59, s.1; 1997, c.152, s.3 (repealed 2005, c.292, s.9.) 1997, c.152, s.5; 2005, c.292, s.1; 2009, c.1, s.1; 2011, c.107, s.1; 2015, c.67.' is overly complicated, doing manual bypass
+- Otherwise regex pattern captures every other test case
+- Now need to test on full statutes data 
+- Log output and json outputting
+
+### Accomplished
+- Refined regex to match all but the mega citation test case
+
+New pattern (Deleted by amendment, P.L.1991, c.91). d.   (Deleted by amendment, P.L.1991, c.91). e.   (Deleted by amendment, P.L.1991, c.91).
+
+
+### 03/08/2025
+
+### Still preprocessing for these damn footnotes
+### Goals
+### Try to finish the getting rid of the legislative notes that never seemed to have a consistent pattern... 
+### Almost got them all now need a new regex for those not on their own line
+
+### Might just give up on such hardcore preprocessing, evaluating how valuable it could be for model performance and retrieval
+### Still need to potentially identify more useless legal patterns in the text
+
+### Need to explore other approaches than one brute force regular expression.

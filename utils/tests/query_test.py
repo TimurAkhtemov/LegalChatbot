@@ -14,3 +14,5 @@ results = collection.query(
 # Print results
 for i, doc in enumerate(results["metadatas"][0]):
     print(f"Result {i+1}: {doc['section']} - {doc['heading']}\nText: {doc['text'][:300]}...\n")
+
+
