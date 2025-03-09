@@ -64,27 +64,6 @@ Retrieve relevant statutes based on a natural language query.
 python utils/query_test.py
 ```
 
-File Structure
-```
-legal-chatbot-project/
-│── data/
-│   ├── raw/                    # Raw legal text files
-│   │   ├── STATUTES.txt
-│   ├── processed/               # Processed legal data
-│   │   ├── nj_statutes.json
-│   ├── chromadb/                # ChromaDB vector storage (should be git-ignored)
-│
-│── logs/                        # Logs for data processing
-│── utils/                       # Utility scripts
-│   ├── process_statutes.py      # Converts raw text into structured JSON
-│   ├── index_nj_statutes.py     # Indexes legal data into ChromaDB
-│   ├── query_test.py            # Retrieves relevant statutes
-│
-│── requirements.txt             # Python dependencies
-│── .gitignore                   # Files to exclude from version control
-│── README.md                    # Project documentation
-│── ProgressChecks.md            # Notes on debugging and improvements
-```
 
 Development Notes
 
