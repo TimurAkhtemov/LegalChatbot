@@ -129,10 +129,101 @@ New pattern (Deleted by amendment, P.L.1991, c.91). d.   (Deleted by amendment, 
 
 ### Still preprocessing for these damn footnotes
 ### Goals
-### Try to finish the getting rid of the legislative notes that never seemed to have a consistent pattern... 
-### Almost got them all now need a new regex for those not on their own line
+Try to finish the getting rid of the legislative notes that never seemed to have a consistent pattern... 
+Almost got them all now need a new regex for those not on their own line
 
-### Might just give up on such hardcore preprocessing, evaluating how valuable it could be for model performance and retrieval
-### Still need to potentially identify more useless legal patterns in the text
+Might just give up on such hardcore preprocessing, evaluating how valuable it could be for model performance and retrieval
+Still need to potentially identify more useless legal patterns in the text
 
-### Need to explore other approaches than one brute force regular expression.
+Need to explore other approaches than one brute force regular expression.
+
+## 03/09/2025
+
+- Upon considering using language models for processing came up with ideas of using zero shot/few shot classification with assistance from an LLM 
+- Finally think I found a viable solution to have a model just clean each section/chunk for me instead of regexing the shit out of it
+- Thanks and not thanks to chatgpt 
+- Will use approach from https://www.youtube.com/watch?v=_R-ff4ZMLC8  10:52 - 21:00
+
+### 03/10/2025
+
+### Goals today
+- No more using regular expressions. Work with what you got and move onto implementing cleaning and structuring with LLM
+- Use a small model (4o mini, or something) to produce cleaned chunks of text with menaingful legal information for the user
+- Test on subset of data (STATUTES_SAMPLE, or STATUTES_TEST) 
+
+### Notes
+- There are numerous references to other laws and documents, potential for agentic rag to search deep within references to extract even more information?
+
+
+## 03/14/2025
+
+### Goals Today
+- Preprocessing process:
+  1. First organize text into json format with title, section, and text (already handled by organize_statutes.py)
+  2. Next with llm, remove citations, footnotes and irrelevant information to general public. And pass full text contents through LLM to determine if there is valuable legal information within the text. Irrelevant information will be that of legislative information only for legal housekeeping i.e.:
+  54:8A-123.  Effective date;  time of application
+    This act shall take effect immediately and shall be applicable to income received or accrued subject to taxation by virtue of P.L.1976, c. 66.
+
+     L.1976, c. 126, s. 2, eff. Dec. 20, 1976.
+     which is useless information to general public. 
+     Then:
+    - Assign labels to each section 1: valid (valid legal text), 2: invalid (not useful for general public), 3: review (review the text)
+    - **This will assist in further preprocsessing the data to clean it
+
+  {
+"id": <section number without appendix since we are not dividing the chunks for now>
+"title": <TITLE # - title heading>
+"section_id": <section number with the name>
+"text": <with footnotes/citations removed>
+"classification": <valid, invalid (if invalid, we just remove/not include), review>
+}
+
+    - Instances where text size is too long for the context window or >500 tokens we run through a chunking function to do a simple chunking (not chunked yet for vector db which we will use a more advanced system). Likely will split on paragraphs or bullet points or some other split without middle of word or sentence cutoff.
+    - For each of these smaller chunks we decide whether or not we should keep them in the rest of the text. If valid include, if not valid remove, and no review
+    - Then concatenate them back together into the full text and since we already classified the simple chunks we can move onto the next section.
+
+  3. Chunking. Now we need to chunk the data according to semantic meaning and logically what pieces of text within token lengths longer than a certain amount or a varying length without cutting meaning.
+    - Agentic chunking from: https://mer.vin/2024/03/chunking-strategy/ 
+
+
+## 03/18/2025
+### Goals Today
+- select a model that will accuratley remove citations
+- Test the model on some sample data, (lm studio)
+- Get a sample run on the test and sample data set
+
+### Notes
+- qwen 2.5 32b coding instruct seems to handle recognizing these exact citation patterns very effectively
+- Changed desired output from being the entire text with citations removed to just the citations themselves to reduce token output
+  - Instead of having the model remove all of the citations and having to reprint the entire text, have model print the citations and then programatically remove them with .replace()
+  - Can much more easily retain the citations in the json if decided to keep for more advanced rag in the future. 
+- New strategy of only submitting in the last 200-250 tokens of the text for the model to read the text and extract citations
+  - improves model performance and accuracy
+  - Use speculative decoding for even faster inference
+- Sometimes the model outputs white spaces in between the extracted citations which can cause issues with matching
+
+### Accomplished
+- Optimized performance of model choice qwen 2.5 7B with reducing token input and using smaller models with speculative decoding with qwen 2.5 3b
+- Seems to handle test cases very accuratley
+- Accomplished further optimzation with using qwen 2.5 7B with qwen 2.5 0.5B draft
+- From testing, we can fully extract the citations from the model, remove the white spaces and then remove from original text
+  More specifically
+    1. Model extracts citaions and provides them as output
+    2. Remove any white spaces from original text from the end to the length of extracted citation original_text[-(len(extracted_citation))] + small buffer to account for any potential missed part of the citation if the model output is in fact shorter than the original
+    3. Remove any white spaces from extracted citation
+    4. Match and remove from original text and return
+
+- Just discovered eyecite an open source library "for extracting legal citations from text. It is used, among other things, to process millions of legal documents in the collections of CourtListener and Harvard's Caselaw Access Project, and has been developed in collaboration with both projects." 
+  - **not useful for this case
+
+
+## 03/20/2025
+### Notes
+- Had trouble with structured output not returning None and hallucinating output citations
+- Tried removing structured output json resulted in model gibberish
+- Spent substanital amount of time understanding why this was happening
+  - Reverted a lot of previous changes, will include back the tests.
+- Optimal approach using /v1/chat/completions endpoint with structured output gave consistent results
+
+- Opted for 7B with 0.5B speculative decoding - much faster inference but looking for faster optimizations
+
