@@ -227,3 +227,11 @@ Need to explore other approaches than one brute force regular expression.
 
 - Opted for 7B with 0.5B speculative decoding - much faster inference but looking for faster optimizations
 
+## 04/15/2025
+### Notes
+
+- Moving past citation extraction for now. Too big of a headache, building mvp
+- Indexed the statutes into chroma db and queried with gemini
+- Responses seem valid so far
+
+

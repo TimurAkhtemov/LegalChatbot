@@ -12,6 +12,7 @@ __pycache__/
 .vscode/
 .idea/
 *.iml
+.env
 
 # Ignore everything in data/ except processed statutes JSON
 data/

@@ -20,8 +20,8 @@ section_pattern = re.compile(
 )
 
 # Paths for test defaults - using absolute paths
-DEFAULT_INPUT = os.path.join(project_root, "data/raw/STATUTES_TEST.txt")
-DEFAULT_OUTPUT = os.path.join(project_root, "data/processed/processed_nj_statutes_test.json")
+DEFAULT_INPUT = os.path.join(project_root, "data/raw/STATUTES_SAMPLE.txt")
+DEFAULT_OUTPUT = os.path.join(project_root, "data/processed/processed_nj_statutes_sample.json")
 LOG_FILE = os.path.join(project_root, "logs/encoding_issues.log")
 
 def clean_line(line):

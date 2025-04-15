@@ -7,7 +7,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 
 input_file = "data/raw/STATUTES.txt"
-output_file = "data/processed/STATUTES_SAMPLE.txt"
+output_file = "data/raw/STATUTES_SAMPLE.txt"
 
 # Read the input file
 # Extract 1000 lines every 25000 lines
@@ -20,7 +20,7 @@ with open(input_file, "r") as f:
 chunks = text.split("\n")
 
 # Extract 1000 lines every 25000 lines
-for i in range(0, len(chunks), 25000):
+for i in range(0, len(chunks), 20000):
     with open(output_file, "a") as f:
         # Join the chunks with newlines before writing
         f.write("\n".join(chunks[i:i+1000]))
