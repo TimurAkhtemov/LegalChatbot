@@ -1,25 +1,26 @@
-Legal Q&A Chatbot
+# NJ Legal Q&A Chatbot
 
-Project Overview
+## Project Overview
 
-The Legal Q&A Chatbot is designed to retrieve and analyze New Jersey state statutes using a Retrieval-Augmented Generation (RAG) approach. It processes legal texts, indexes them in a ChromaDB vector database, and uses a large language model (LLM) (Mistral-7B) to generate responses based on user queries.
+The NJ Legal Q&A Chatbot is designed to retrieve and analyze New Jersey state statutes using a Retrieval-Augmented Generation (RAG) approach. It processes legal texts, indexes them in a ChromaDB vector database, and uses Google's Gemini models to generate accurate, grounded responses based on user queries.
 
-Features
+## Features
 
-- Statute Processing: Parses raw legal text and converts it into structured JSON format.
-- Vector Indexing: Stores legal texts as embeddings in ChromaDB for efficient retrieval.
-- Query Retrieval: Allows users to search statutes based on natural language queries.
-- LLM Integration: Uses Mistral-7B for generating answers based on retrieved statutes.
-- Filtering & Preprocessing: Removes duplicate statutes and excludes sections with no meaningful content.
+- **Statute Processing**: Parses raw legal text and converts it into structured JSON format for indexing
+- **Vector Indexing**: Stores legal texts as embeddings in ChromaDB using Gemini embeddings for efficient retrieval
+- **Interactive Web Interface**: Streamlit-based UI that allows users to ask legal questions
+- **RAG Implementation**: Uses ChromaDB for retrieval and Gemini 1.5 Flash for generating answers
+- **Custom Embedding**: Uses Google's Gemini embedding model for semantic search
+- **Fine-tuned Model**: Includes a fine-tuned Qwen 2.5 1.5B model for specialized legal reasoning
 
-Installation
+## Installation
 
-Prerequisites
+### Prerequisites
 - Python 3.8+
 - Virtual environment (recommended)
-- Required dependencies in requirements.txt
+- Google API key for Gemini access
 
-Setup Instructions
+### Setup Instructions
 
 1. Clone the repository:
 ```bash
@@ -27,57 +28,61 @@ git clone https://github.com/your-repo/legal-chatbot-project.git
 cd legal-chatbot-project
 ```
 
-Create and activate a virtual environment:
+2. Create and activate a virtual environment:
 ```bash
-python -m venv venv
-source venv/bin/activate  # Mac/Linux
-venv\Scripts\activate  # Windows
+python -m venv .venv
+source .venv/bin/activate  # Mac/Linux
+.venv\Scripts\activate  # Windows
 ```
 
-Install dependencies:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-Set up ChromaDB storage (optional):
+4. Set up your environment variables:
 ```bash
-mkdir -p data/chromadb
+export GOOGLE_API_KEY='your-api-key-here'  # For Gemini API
 ```
 
-Usage
+## Usage
 
-1. Processing Statutes  
-Convert raw legal text (STATUTES.txt) into structured JSON.
+1. Start the Streamlit application:
 ```bash
-python utils/process_statutes.py
+streamlit run app.py
 ```
 
-2. Indexing Processed Statutes  
-Store processed statutes in ChromaDB for retrieval.
-```bash
-python utils/index_nj_statutes.py
-```
+2. Access the web interface at http://localhost:8501
 
-3. Querying Statutes  
-Retrieve relevant statutes based on a natural language query.
-```bash
-python utils/query_test.py
-```
+3. Enter your legal question about New Jersey law in the search box
 
+4. The system will:
+   - Retrieve relevant statutes from ChromaDB
+   - Generate a response using the Gemini model
+   - Display both the answer and the source statutes
 
-Development Notes
+## Project Components
 
-Filtering Criteria
-- Sections with empty text fields are excluded from indexing.
-- Legal sections with terms like "repealed," "superseded," or "reallocated" are only excluded if they have no text.
-- The test file (STATUTES_TEST.txt) includes edge cases to verify processing behavior.
+- `app.py`: Streamlit web interface
+- `rag_pipeline.py`: Core RAG implementation connecting ChromaDB with Gemini
+- `gemini_embed_function.py`: Custom embedding function for ChromaDB
+- `utils/`: Directory containing statute processing utilities
+- `chroma_db/`: Persistent storage for ChromaDB vector database
+- `qwen2.5-1.5b-finetuned/`: WORK IN PROGRESS (fine tuning model to retrieve citations from the text)
 
-Free RAG Deployment Options
-- Hugging Face Inference API (for quick cloud-based LLM queries)
-- Google Colab (for free GPU-based inference)
-- Hugging Face Spaces (for persistent chatbot deployment)
+## Development Notes
 
-Next Steps
-- Implement full LLM integration for answer generation.
-- Explore chunking long statutes for improved retrieval.
-- Optimize query filtering based on metadata (e.g., title-based filtering).
+### Data Processing
+- The system processes raw NJ statute texts into structured data for indexing
+- Filtering removes empty sections while preserving meaningful content
+- Citations are extracted and processed to enhance context
+
+### Model Selection
+- Gemini 1.5 Flash provides efficient response generation
+- Custom embedding function enhances retrieval quality
+
+## Future Enhancements
+- Implement additional filtering options based on statute metadata
+- Add citation linking between related statutes
+- Improve handling of complex legal questions with multiple statute references
+- Enhance UI with legal citation formatting and explanation features
