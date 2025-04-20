@@ -20,8 +20,7 @@ data/
 logs/
 *.jsonl  # If you store intermediate dataset files
 *.sqlite  # ChromaDB file
-chromadb/
-db.sqlite3  # If you use SQLite
+*.sqlite3  # If you use SQLite
 
 # Ignore Hugging Face & model files
 .cache/
@@ -29,9 +28,21 @@ db.sqlite3  # If you use SQLite
 *.h5
 *.pt
 *.onnx
+*.pth
+*.bin
 
 # Ignore Jupyter Notebook checkpoints (if using notebooks)
 .ipynb_checkpoints/
 
 # Ignore progress notes file
 ProgressChecks.md
+
+# ChromaDB directories and files
+chroma_db/
+.test_cache/
+
+# Finetuned models
+qwen2.5-1.5b-finetuned/
+
+# macOS files
+.DS_Store
