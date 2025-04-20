@@ -11,13 +11,12 @@ The NJ Legal Q&A Chatbot is designed to retrieve and analyze New Jersey state st
 - **Interactive Web Interface**: Streamlit-based UI that allows users to ask legal questions
 - **RAG Implementation**: Uses ChromaDB for retrieval and Gemini 1.5 Flash for generating answers
 - **Custom Embedding**: Uses Google's Gemini embedding model for semantic search
-- **Fine-tuned Model**: Includes a fine-tuned Qwen 2.5 1.5B model for specialized legal reasoning
+- **Fine-tuned Model**: **WORK IN PROGRESS** fine-tuned Qwen 2.5 1.5B model for citation extraction
 
 ## Installation
 
 ### Prerequisites
-- Python 3.8+
-- Virtual environment (recommended)
+- Python 3.11+
 - Google API key for Gemini access
 
 ### Setup Instructions
@@ -46,13 +45,13 @@ export GOOGLE_API_KEY='your-api-key-here'  # For Gemini API
 ```
 
 5. Run setup.py to download the statutes text
-**CURRENTLY NOT AVAILABLE ON STATUTES WEBSITE**
+**CURRENTLY NOT AVAILABLE ON STATUTES WEBSITE, WILL CREATE WORKAROUND SOON**
 
-6. Run organize_statutes.py
+7. Run organize_statutes.py
 
-7. Run the index_statutes.ipynb notebook to index into chromadb
+8. Run the index_statutes.ipynb notebook to index into chromadb
 
-8. Start the application using Streamlit:
+9. Start the application using Streamlit:
 ```bash
 streamlit run app.py
 ```
