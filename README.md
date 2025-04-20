@@ -45,18 +45,25 @@ pip install -r requirements.txt
 export GOOGLE_API_KEY='your-api-key-here'  # For Gemini API
 ```
 
-## Usage
+5. Run setup.py to download the statutes text
+**CURRENTLY NOT AVAILABLE ON STATUTES WEBSITE**
 
-1. Start the Streamlit application:
+6. Run organize_statutes.py
+
+7. Run the index_statutes.ipynb notebook to index into chromadb
+
+8. Start the application using Streamlit:
 ```bash
 streamlit run app.py
 ```
 
-2. Access the web interface at http://localhost:8501
+## Usage
 
-3. Enter your legal question about New Jersey law in the search box
+1. Access the web interface at http://localhost:8501
 
-4. The system will:
+2. Enter your legal question about New Jersey law in the search box
+
+3. The system will:
    - Retrieve relevant statutes from ChromaDB
    - Generate a response using the Gemini model
    - Display both the answer and the source statutes
